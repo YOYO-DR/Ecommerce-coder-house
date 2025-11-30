@@ -4,6 +4,7 @@ import Footer from './presentation/components/layout/Footer'
 import Navbar from './presentation/components/layout/Navbar'
 import Home from './presentation/pages/Home'
 import NotFound from './presentation/pages/NotFound'
+import ItemListContainer from './presentation/pages/Products'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/products" element={<ItemListContainer title={"Productos de la tienda"} />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
