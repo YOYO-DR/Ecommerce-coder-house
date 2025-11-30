@@ -1,9 +1,12 @@
 # Etapa 1: Construcción de React - Fase de dependencias
 FROM node:22-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
-# Cambia a npm install para incluir devDependencies
-RUN npm install --prefer-offline
+COPY package.json pnpm-lock.yaml ./
+
+# Enable pnpm via corepack
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+RUN pnpm install --prefer-offline
 
 # Etapa 2: Construcción de React - Fase de build
 FROM node:22-alpine AS build
@@ -11,15 +14,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ARG VITE_API_URL
+# Enable pnpm via corepack
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Crar archivo .env dentro de app para que Vite pueda leer las variables de entorno
-RUN echo "VITE_API_URL=${VITE_API_URL}" > .env
-
-# Imprimir lo que quedo en el .env para debug
-RUN cat .env
 # Añade flags para producción
-RUN npm run build -- --mode production
+RUN pnpm run build -- --mode production
 
 # Etapa 3: Servir con Nginx (se mantiene igual)
 FROM nginx:1.27-alpine

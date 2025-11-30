@@ -1,6 +1,5 @@
-
 services:
-    frontend:
+  frontend:
     build:
       context: ./
       dockerfile: ./compose/production/Dockerfile
@@ -9,9 +8,8 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
         limits:
           cpus: ${FRONTEND_CPU:-1}
           memory: ${FRONTEND_RAM:-1g}
-
